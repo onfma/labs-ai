@@ -161,3 +161,9 @@ print_game(x)
 IDDFS_search(matrix, 10)
 
 
+
+#867254031
+stateList = [7, 1, 3, 5, 6, 4, 2, 0, 8]
+matrix = model_problem(stateList)
+print_game(matrix)
+IDDFS_search(matrix, 25)
