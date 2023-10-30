@@ -3,14 +3,14 @@ from colorama import Fore, init
 #model problem after an array of known cells along with constraints for even cells
 #problem is modeled as a matrix of class structures each having a final value, a boolean if the cell is final or not, same for the even cells and the domain
 
-class Cell:
-    def __init__(self, value, final, even, domain):
+class Cell:     #structura de celula
+    def __init__(self, value, final, even, domain):     #constructor
         self.value = value
         self.final = final
         self.even = even
         self.domain = domain
     
-    def minimize(self, array):
+    def minimize(self, array):      #fct care ia un vector de restrictii si minimizeaza domeniul, daca len(dom) == 1 => stare finala
         if self.final:
             return
         
@@ -23,7 +23,7 @@ class Cell:
 
         return
 
-def model_board(number_array, even_cells):
+def model_board(number_array, even_cells):      #modelare ca o matrice de cells
     matrix = []
     all_values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     even_values = [2, 4, 6, 8]
