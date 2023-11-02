@@ -1,5 +1,6 @@
 
 from colorama import Fore, init
+import copy
 #model problem after an array of known cells along with constraints for even cells
 #problem is modeled as a matrix of class structures each having a final value, a boolean if the cell is final or not, same for the even cells and the domain
 
@@ -9,19 +10,22 @@ class Cell:     #structura de celula
         self.final = final
         self.even = even
         self.domain = domain
+        self.first_domain = copy.deepcopy(domain)
     
-    def minimize(self, array):      #fct care ia un vector de restrictii si minimizeaza domeniul, daca len(dom) == 1 => stare finala
+    def minimize(self, array): 
         if self.final:
-            return
-        
+            return False
+
+        old_dom = self.domain 
+
         self.domain = [value for value in self.domain if value not in array]
 
         if len(self.domain) == 1:
-            self.value = self.domain[0]
-            self.final = True
+            self.value = self.domain[0]  
             self.domain = []
+            self.final = True 
 
-        return
+        return old_dom == self.domain 
 
 def model_board(number_array, even_cells):      #modelare ca o matrice de cells
     matrix = []
@@ -59,6 +63,31 @@ def print_board(matrix):
         else:
             print() 
 
+
+def MRV_cell(board):
+    min_domain = float('inf')
+    cell = None
+    for i in range(9):
+        for j in range(9):
+            cell = (i, j)
+            if not board[i][j].final and len(board[i][j].domain) < min_domain:
+                min_domain = len(board[i][j].domain)
+    return cell
+
 def check_solved(board):
     unsolved_cells = [board[i][j] for i in range(9) for j in range(9) if board[i][j].final == False]
     return len(unsolved_cells) == 0
+
+def check_notSolvable(board):
+    for i in range(9):
+        row = [board[i][j].value for j in range(9) if board[i][j].final]
+        col = [board[j][i].value for j in range(9) if board[j][i].final]
+        grp = [board[j][i].value for j in range(9) if board[j][i].final]
+        if any(row.count(x) > 1 for x in row) or any(col.count(x) > 1 for x in col) or any(grp.count(x) > 1 for x in grp):
+            print(row)
+            return False
+        
+    if any(board[i][j].value == 0 and len(board[i][j].domain) == 0 for i in range(9) for j in range(9)):
+        return False
+
+    return True
