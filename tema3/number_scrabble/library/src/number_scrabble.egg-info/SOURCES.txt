@@ -1,0 +1,8 @@
+pyproject.toml
+src/number_scrabble/__init__.py
+src/number_scrabble.egg-info/PKG-INFO
+src/number_scrabble.egg-info/SOURCES.txt
+src/number_scrabble.egg-info/dependency_links.txt
+src/number_scrabble.egg-info/top_level.txt
+src/number_scrabble/game/__init__.py
+src/number_scrabble/logic/__init__.py
