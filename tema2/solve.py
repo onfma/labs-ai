@@ -16,6 +16,7 @@ def solve(board):
     dom = cell.first_domain
     save_board = [board[i][j] for i in range(9) for j in range(9)]
 
+    # FC - pt celula cu cel mai mic domeniu verifica daca o anumita val rezolva jocul (recursiv)
     for value in dom:
         cell.value = value
         cell.final = True
@@ -60,4 +61,6 @@ def minimizing(board):
                 board[i][j].minimize(column_values[j])
                 board[i][j].minimize(group_values[(i // 3) * 3 + j // 3])
 
+    # se verifica ca s-a facut vreo schimbare in joc, daca nu => break loop
     return len([(i, j) for i in range(9) for j in range(9) if change[i*9+j] != board[i][j].domain]) != 0
+

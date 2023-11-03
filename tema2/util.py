@@ -7,12 +7,12 @@ import copy
 class Cell:     #structura de celula
     def __init__(self, value, final, even, domain):     #constructor
         self.value = value
-        self.final = final
-        self.even = even
-        self.domain = domain
-        self.first_domain = copy.deepcopy(domain)
+        self.final = final #flag true/false
+        self.even = even #flag true/false pt constraint
+        self.domain = domain #domeniul curent al celulei
+        self.first_domain = copy.deepcopy(domain) #domeniul initial folosit pt fc
     
-    def minimize(self, array): 
+    def minimize(self, array): #scade din domeniu valorile din array
         if self.final:
             return False
 
@@ -64,7 +64,7 @@ def print_board(matrix):
             print() 
 
 
-def MRV_cell(board):
+def MRV_cell(board): # retrurneaza celula cu cel mai mic domeniu
     min_domain = float('inf')
     cell = None
     for i in range(9):
@@ -78,13 +78,12 @@ def check_solved(board):
     unsolved_cells = [board[i][j] for i in range(9) for j in range(9) if board[i][j].final == False]
     return len(unsolved_cells) == 0
 
-def check_notSolvable(board):
+def check_notSolvable(board): # verifica daca o instanta are celule nefinale cu domeniu vid SAU daca avem 2 valori identice undeva 
     for i in range(9):
         row = [board[i][j].value for j in range(9) if board[i][j].final]
         col = [board[j][i].value for j in range(9) if board[j][i].final]
         grp = [board[j][i].value for j in range(9) if board[j][i].final]
         if any(row.count(x) > 1 for x in row) or any(col.count(x) > 1 for x in col) or any(grp.count(x) > 1 for x in grp):
-            print(row)
             return False
         
     if any(board[i][j].value == 0 and len(board[i][j].domain) == 0 for i in range(9) for j in range(9)):
