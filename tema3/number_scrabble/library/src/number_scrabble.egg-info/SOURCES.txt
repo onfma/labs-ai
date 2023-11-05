@@ -6,3 +6,7 @@ src/number_scrabble.egg-info/dependency_links.txt
 src/number_scrabble.egg-info/top_level.txt
 src/number_scrabble/game/__init__.py
 src/number_scrabble/logic/__init__.py
+src/number_scrabble/logic/exceptions.py
+src/number_scrabble/logic/game.py
+src/number_scrabble/logic/models.py
+src/number_scrabble/logic/validators.py

@@ -1,1 +1,10 @@
 Implementați un program capabil să joace “Number Scrabble”. Doi jucători aleg alternativ un număr între 1 și 9 fără a repeta un număr ales anterior de oricare din cei doi jucători. Câștigă jucătorul care a ales de la începutul jocului trei numere care, adunate, totalizează 15. În cazul în care numere nu mai pot fi alese și nici un jucător nu a câștigat, partida se termină remiză.
+
+
+inainte de pornire:
+
+$ cd tic-tac-toe/
+$ python -m venv venv/
+$ venv\Scripts\activate
+$ cd frontends/
+(venv) $ python -m console
