@@ -154,3 +154,8 @@ def number_scrabble(state):
         print("It's a tie! Everyboby is a winner..")
 
 number_scrabble(initializare(1))
+
+
+# 1 3 5 9 = HUMAN
+# 8 7 3 6 = COMPUTER
+# 5 3 9 6 8 = TIE
