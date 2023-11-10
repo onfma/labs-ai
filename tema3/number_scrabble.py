@@ -78,7 +78,7 @@ def euristica(state, available_numbers):
 
 def minimax(state, depth, available_numbers):
 
-    if verificare_stare_finala(state) or depth == 0:
+    if verificare_stare_finala(state) == True or depth == 0:
         return euristica(state, available_numbers)
     
     # computer
@@ -130,7 +130,8 @@ def number_scrabble(state):
             available_numbers.remove(player_input)
         
         else: # computer
-            scor, player_input = minimax(state, 3, available_numbers)
+            available_numbers_copy = copy.deepcopy(available_numbers)
+            scor, player_input = minimax(state, 3, available_numbers_copy)
             if player_input == None:
                 player_input = random.choice(available_numbers)
             print(f"Computer selects: {player_input}")
