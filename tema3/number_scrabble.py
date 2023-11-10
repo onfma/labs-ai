@@ -83,21 +83,7 @@ def minimax(state, depth, available_numbers):
     
     # computer
     if state["player"] == 2: 
-        best_scor = float('inf') # plus infinit pt a gasi mini
-        best_value = None
-
-        for n in available_numbers:
-            new_state = copy.deepcopy(state)
-            if validare_tranzitie(new_state,n):
-                tranzitie(new_state,n)
-                available_numbers.remove(n)
-                scor, _ = minimax(new_state, depth-1, available_numbers)
-                if scor < best_scor:
-                    best_scor = scor
-                    best_value = n
-    #human
-    elif state["player"] == 1: 
-        best_scor = float('-inf') # minus infinit pt a gasi maxi
+        best_scor = float('-inf') # plus infinit pt a gasi mini
         best_value = None
 
         for n in available_numbers:
@@ -107,6 +93,20 @@ def minimax(state, depth, available_numbers):
                 available_numbers.remove(n)
                 scor, _ = minimax(new_state, depth-1, available_numbers)
                 if scor > best_scor:
+                    best_scor = scor
+                    best_value = n
+    #human
+    elif state["player"] == 1: 
+        best_scor = float('inf') # minus infinit pt a gasi maxi
+        best_value = None
+
+        for n in available_numbers:
+            new_state = copy.deepcopy(state)
+            if validare_tranzitie(new_state,n):
+                tranzitie(new_state,n)
+                available_numbers.remove(n)
+                scor, _ = minimax(new_state, depth-1, available_numbers)
+                if scor < best_scor:
                     best_scor = scor
                     best_value = n
 
