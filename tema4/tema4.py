@@ -28,12 +28,18 @@ output_units = 3 # dim stratului de iesire (nr de clase din seeds_dataset)
 learning_rate = 0.001 # rata de invatare
 nr_epoci = 50 # nr maxim de epoci
 
-
 # initializarea modelului
-# model = Sequential()
-# model.add(Dense(hidden_units, input_dim=input_dim, activation='relu', kernel_initializer=initializer)) # adaugarea stratului ascuns
-# model.add(Dense(output_units, activation='softmax', kernel_initializer=initializer))
+model = Sequential()
+model.add(Dense(hidden_units, # adaugarea stratului ascuns
+                input_dim=input_dim, 
+                activation='relu', # functia de activare pt stratul ascuns
+                kernel_initializer=initializer)) 
+model.add(Dense(output_units, #adaugarea stratului final
+                activation='softmax', # functia de activare pt stratul final
+                kernel_initializer=initializer))
 
 # compilare model
-# model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy']) 
-# model.summary()
+model.compile(loss='categorical_crossentropy', # functia de eroare
+              optimizer='adam',
+              metrics=['accuracy']) # metrici de evaluare
+model.summary()
