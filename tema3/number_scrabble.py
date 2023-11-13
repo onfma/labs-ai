@@ -83,7 +83,7 @@ def minimax(state, depth, available_numbers):
     
     # computer
     if state["player"] == 2: 
-        best_scor = float('-inf') # plus infinit pt a gasi mini
+        best_scor = float('-inf') # minus infinit pt a gasi maxi
         best_value = None
 
         for n in available_numbers:
@@ -97,7 +97,7 @@ def minimax(state, depth, available_numbers):
                     best_value = n
     #human
     elif state["player"] == 1: 
-        best_scor = float('inf') # minus infinit pt a gasi maxi
+        best_scor = float('inf') # plus infinit pt a gasi mini
         best_value = None
 
         for n in available_numbers:
