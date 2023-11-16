@@ -1,8 +1,10 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 from random import seed
 from random import random
+import copy
 
 # Read the data
 file_path = "https://archive.ics.uci.edu/ml/machine-learning-databases/00236/seeds_dataset.txt"
@@ -21,7 +23,7 @@ input_size = x_train.shape[1]
 hidden_layer = 64
 output_layer = 3
 learning_rate = 0.001
-nr_epochs = 50
+nr_epochs = 10000
 
 #Initialize weights
 np.random.seed(42)
@@ -38,10 +40,10 @@ def sigmoid_derivative(x):
 
 # Error function and its derivative
 def mean_squared_error(predicted, target):
-    return np.mean(np.square(predicted - target))
+    return np.mean(np.square(np.array(predicted).reshape(-1, 1) - np.array(target)))
 
 def mean_squared_error_derivative(predicted, target):
-    return 2 * (predicted - target) / len(target)
+    return 2 * (predicted - target.reshape(-1, 1)) / len(target)
 
 # Forward propagation
 def forward_propagation(x_samples, weights_hidden, weights_output):
@@ -66,3 +68,33 @@ print(x_sample)
 print(np.array(hidden))
 print("Output of the neurons for output layer")
 print(np.array(outputs))
+
+# Back propagation
+def back_propagation(x_samples, y_samples, weights_hidden, weights_output, learning_rate):
+    outputs, hidden = forward_propagation(x_samples, weights_hidden, weights_output)
+
+    output_errors = mean_squared_error_derivative(np.array(outputs), np.array(y_samples)) # eroare output layer
+    hidden_errors = np.dot(output_errors, weights_output.T) * sigmoid_derivative(np.array(hidden)) # eroare hidden layer
+
+    weights_output -= learning_rate * np.dot(np.array(hidden).T, output_errors) / len(x_samples) # update weights output layer
+    weights_hidden -= learning_rate * np.dot(np.array(x_samples).T, hidden_errors) / len(x_samples) # update weights hidden layer
+
+    return weights_hidden, weights_output
+
+# Training
+for epoch in range(nr_epochs):
+    weights_hidden, weights_output = back_propagation(x_train, y_train, weights_hidden, weights_output, learning_rate)
+
+    # Calculate and print mean squared error on the training set
+    train_outputs, _ = forward_propagation(x_train, weights_hidden, weights_output)
+    train_error = mean_squared_error(train_outputs, y_train)
+    print(f"Epoch {epoch + 1}/{nr_epochs}, Train Error: {train_error}")
+
+# testare retea antrenata
+test_outputs, _ = forward_propagation(x_test, weights_hidden, weights_output)
+test_error = mean_squared_error(test_outputs, y_test)
+print(f"Test Error: {test_error}") # 1.58
+
+predictions = np.argmax(test_outputs, axis=1)
+accuracy = accuracy_score(y_test, predictions)
+print(f"Accuracy on the test set: {accuracy}") # 0.38
