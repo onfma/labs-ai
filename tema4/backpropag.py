@@ -1,10 +1,6 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-from random import seed
-from random import random
-import copy
 
 # Read the data
 file_path = "https://archive.ics.uci.edu/ml/machine-learning-databases/00236/seeds_dataset.txt"
@@ -85,15 +81,19 @@ def back_propagation(x_samples, y_samples, weights_hidden, weights_output, learn
 for epoch in range(nr_epochs):
     weights_hidden, weights_output = back_propagation(x_train, y_train, weights_hidden, weights_output, learning_rate)
 
-    # Calculate and print mean squared error on the training set
+    # squared error on the training set
     train_outputs, _ = forward_propagation(x_train, weights_hidden, weights_output)
     train_error = mean_squared_error(train_outputs, y_train)
-    print(f"Epoch {epoch + 1}/{nr_epochs}, Train Error: {train_error}")
+    #print(f"Epoch {epoch + 1}/{nr_epochs}, Train Error: {train_error}")
 
 # testare retea antrenata
 test_outputs, _ = forward_propagation(x_test, weights_hidden, weights_output)
 test_error = mean_squared_error(test_outputs, y_test)
 print(f"Test Error: {test_error}") # 1.58
+
+def accuracy_score(y_test, predictions):
+    correct_predictions = np.sum(y_test == predictions)
+    return correct_predictions / len(y_test)
 
 predictions = np.argmax(test_outputs, axis=1)
 accuracy = accuracy_score(y_test, predictions)
