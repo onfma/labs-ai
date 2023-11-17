@@ -19,7 +19,7 @@ input_size = x_train.shape[1]
 hidden_layer = 64
 output_layer = 3
 learning_rate = 0.001
-nr_epochs = 1000
+nr_epochs = 10000
 
 #Initialize weights
 np.random.seed(42)
@@ -95,12 +95,12 @@ def accuracy_score(y_test, predictions):
     return correct_predictions / len(y_test)
 predictions = np.argmax(test_outputs, axis=1) + 1
 
-print(predictions)
-print(y_test)
+# print(predictions)
+# print(y_test)
 
-print("for 5th line:")
-print(f"Atributres: {x_test[4]} \t Class: {y_test[4]}")
-print(f"Output layer weights : {test_outputs[4]}")
-print(f"Network prediciton: {predictions[4]}")
+# print("for 5th line:")
+# print(f"Atributres: {x_test[4]} \t Class: {y_test[4]}")
+# print(f"Output layer weights : {test_outputs[4]}")
+# print(f"Network prediciton: {predictions[4]}")
 accuracy = accuracy_score(y_test, predictions)
 print(f"Accuracy on the test set: {accuracy}") # 0.38

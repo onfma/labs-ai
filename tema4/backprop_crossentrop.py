@@ -16,10 +16,10 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_
 
 #initialize the parameters
 input_size = x_train.shape[1]
-hidden_layer = 64
+hidden_layer = 10
 output_layer = 3
-learning_rate = 0.001
-nr_epochs = 10000
+learning_rate = 0.1
+nr_epochs = 500
 
 #Initialize weights
 np.random.seed(42)
@@ -30,9 +30,7 @@ def one_hot_encode(labels, num_classes):
     return np.eye(num_classes)[labels - 1]
 
 y_train_onehot = one_hot_encode(y_train, output_layer)
-print(y_train_onehot)
 y_test_onehot = one_hot_encode(y_test, output_layer)
-print(y_test_onehot)
 
 # Activation functions and derivatives
 def sigmoid(x):
@@ -107,12 +105,12 @@ def accuracy_score(y_test, predictions):
     return correct_predictions / len(y_test)
 predictions = np.argmax(test_outputs, axis=1) + 1
 
-print(predictions)
-print(y_test)
+# print(predictions)
+# print(y_test)
 
-print("\nfor 5th line:")
-print(f"Atributres: {x_test[4]} \t Class: {y_test[4]}")
-print(f"Output layer weights : {test_outputs[4]}")
-print(f"Network prediciton: {predictions[4]}")
+# print("\nfor 5th line:")
+# print(f"Atributres: {x_test[4]} \t Class: {y_test[4]}")
+# print(f"Output layer weights : {test_outputs[4]}")
+# print(f"Network prediciton: {predictions[4]}")
 accuracy = accuracy_score(y_test, predictions)
 print(f"\nAccuracy on the test set: {accuracy}") # 0.38
