@@ -19,7 +19,7 @@ input_size = x_train.shape[1]
 hidden_layer = 10
 output_layer = 3
 learning_rate = 0.1
-nr_epochs = 500
+nr_epochs = 200
 
 #Initialize weights
 np.random.seed(42)
@@ -42,6 +42,10 @@ def sigmoid_derivative(x):
 def softmax(x):
     exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
     return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
+
+def softmax_derivative(x):
+    s = softmax(x)
+    return s * (1 - s)
 
 # Error function and its derivative
 def mean_squared_error(predicted, target):
@@ -81,7 +85,7 @@ def back_propagation(x, y, weights_hidden, weights_output, learning_rate):
     hidden, outputs = forward_propagation(x, weights_hidden, weights_output)
 
     output_errors = crossentropy_derivative(outputs, np.array(y))  # error for output layer
-    hidden_errors = np.dot(output_errors, weights_output.T) * sigmoid_derivative(np.array(hidden))  # error for hidden layer
+    hidden_errors = np.dot(output_errors, weights_output.T) * softmax_derivative(np.array(hidden))  # error for hidden layer
 
     weights_output -= learning_rate * np.dot(np.array(hidden).T, output_errors) / len(x)  # update weights output layer
     weights_hidden -= learning_rate * np.dot(np.array(x).T, hidden_errors) / len(x)  # update weights hidden layer
