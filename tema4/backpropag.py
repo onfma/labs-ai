@@ -19,13 +19,13 @@ input_size = x_train.shape[1]
 hidden_layer = 64
 output_layer = 3
 learning_rate = 0.001
-nr_epochs = 10000
+nr_epochs = 10
 
 #Initialize weights
 np.random.seed(42)
 weights_hidden = np.random.randn(input_size, hidden_layer)
 weights_output = np.random.randn(hidden_layer, output_layer) 
-print(weights_hidden)
+print(len(x_test))
 
 # Activation functions and derivatives
 def sigmoid(x):
@@ -61,7 +61,7 @@ outputs, hidden = forward_propagation(x_sample, weights_hidden, weights_output)
 print("Input layer")
 print(x_sample)
 # print("Output of the neurons for hidden layer:")
-print(np.array(hidden))
+# print(np.array(hidden))
 print("Output of the neurons for output layer")
 print(np.array(outputs))
 
@@ -87,7 +87,8 @@ for epoch in range(nr_epochs):
     #print(f"Epoch {epoch + 1}/{nr_epochs}, Train Error: {train_error}")
 
 # testare retea antrenata
-test_outputs, _ = forward_propagation(x_test, weights_hidden, weights_output)
+_, test_outputs = back_propagation(x_train, y_train, weights_hidden, weights_output, learning_rate)
+
 test_error = mean_squared_error(test_outputs, y_test)
 print(f"Test Error: {test_error}") # 1.58
 
@@ -95,6 +96,6 @@ def accuracy_score(y_test, predictions):
     correct_predictions = np.sum(y_test == predictions)
     return correct_predictions / len(y_test)
 
-predictions = np.argmax(test_outputs, axis=1)
+predictions = np.argmax(test_outputs, axis=1) + 1
 accuracy = accuracy_score(y_test, predictions)
 print(f"Accuracy on the test set: {accuracy}") # 0.38
