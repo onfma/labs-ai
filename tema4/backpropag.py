@@ -87,7 +87,7 @@ for epoch in range(nr_epochs):
     #print(f"Epoch {epoch + 1}/{nr_epochs}, Train Error: {train_error}")
 
 # testare retea antrenata
-_, test_outputs = back_propagation(x_train, y_train, weights_hidden, weights_output, learning_rate)
+test_outputs, _ = forward_propagation(x_test, weights_hidden, weights_output)
 
 test_error = mean_squared_error(test_outputs, y_test)
 print(f"Test Error: {test_error}") # 1.58
@@ -95,7 +95,8 @@ print(f"Test Error: {test_error}") # 1.58
 def accuracy_score(y_test, predictions):
     correct_predictions = np.sum(y_test == predictions)
     return correct_predictions / len(y_test)
-
-predictions = np.argmax(test_outputs, axis=1) + 1
+predictions = np.argmax(test_outputs, axis=1) 
+print(predictions)
+print(y_test)
 accuracy = accuracy_score(y_test, predictions)
 print(f"Accuracy on the test set: {accuracy}") # 0.38
