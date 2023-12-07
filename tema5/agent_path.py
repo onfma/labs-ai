@@ -9,20 +9,20 @@ class Q_table:
         self.agent = self.start
         self.wind = [0,0,0,0,0,0,0,0,0,0] 
 
-    def set_wind(self, array):
+    def set_wind(self, array):  #set wind on board
         self.wind = array
         for j in range(10):
             if array[j] != 0:
                 for i in range(7):
                     self.table[i, j] = array[j]
 
-    def set_start(self, tuple):
+    def set_start(self, tuple):     #redefine start
         self.start = tuple
 
-    def set_destination(self, tuple):
+    def set_destination(self, tuple):   #redefine end
         self.destination = tuple
 
-    def __str__(self) -> str:
+    def __str__(self) -> str:   #print board status
         prt = ""
         for i in range(7):
             for j in range(10):
@@ -37,50 +37,72 @@ class Q_table:
     
 class Agent:
     def __init__(self) -> None:
-        self.enviorment = Q_table()
-        self.enviorment.set_wind([0,0,0,1,1,1,2,2,1,0])
-        self.position = self.enviorment.start
+        self.environment = Q_table()
+        self.environment.set_wind([0,0,0,1,1,1,2,2,1,0])
+        self.position = self.environment.start       #define environment
         self.path = []
-        self.lrn_rate = 0.9
-        self.eps = 0.001
+        self.Q_val = np.zeros((7,10,4))
 
-
-    def posible_action(self, position):
-        movment_pos = []
-        if self.enviorment.table[(position)] == 0:
+    def next_state(self, curent_pos, action):   #action: 0 = N, 1 = E, 2 = S, 3 = W
+        if self.environment.table[(curent_pos)] == 0:
             directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-            for d in directions:
-                (a, b) = (self.position[0] + d[0], self.position[1] + d[1])
-                if a<=6 and a>=0 and b<=9 and b>=0:
-                    movment_pos.append((a,b))
-            return movment_pos
-        
+            d = directions[action]
+            a, b = curent_pos[0] + d[0], curent_pos[1] + d[1]
+            a = max(0, min(a, 6))
+            b = max(0, min(b, 9)) 
+            return a, b
         else:
-            wind_val = self.enviorment.table[(position)]
-            directions = [(-wind_val, 1), (-wind_val, -1)]
-            for d in directions:
-                (a, b) = (self.position[0] + d[0], self.position[1] + d[1])
-                if a<=6 and a>=0 and b<=9 and b>=0:
-                    movment_pos.append((a,b))
-                elif b<=9 and b>=0 and a<0:
-                    a = 0
-                    movment_pos.append((a,b))
-            return movment_pos
+            wind_val = self.environment.table[(curent_pos)]
+            directions = [(-(wind_val + 1), 0), (-wind_val, 1), (-(wind_val-1), 0), (-wind_val, -1)]
+            d = directions[action]
+            a, b = curent_pos[0] + d[0], curent_pos[1] + d[1]
+            a = max(0, min(a, 6))
+            b = max(0, min(b, 9)) 
+            return a, b
+        
 
+    def Q_learning_algo(self):
+         for _ in range(100):
+            self.environment.agent = self.environment.start
+            state = self.environment.agent
 
-    def print_envr(self):
-        envr = list(self.enviorment.__str__())
-        if self.position != self.enviorment.start:
-            envr[(self.position[0]*10+(self.position[1])+1)*2] = 'A'
-        print(''.join(envr))
+            while state != self.environment.destination:
+                #select action with the biggest Q val(if determined)
+                rand = np.random.rand()
+                if rand < 0.001:
+                    action = np.random.randint(4)
+                else:
+                    action = np.argmax(self.Q_val[state[0], state[1]])
 
+                next_state = self.next_state(state, action)
 
+                self.calc_q_val(state, action, next_state)
 
+                state = next_state
 
+    def calc_q_val(self, state, action, next_state):
+        alpha = 0.9
+        gamma = 0.9
+        reward = -1
+        if state == self.environment.destination:
+            reward = 1
+        max_next_q = np.max(self.Q_val[next_state[0], next_state[1]])
+        current_q = self.Q_val[state[0], state[1], action]
+        q = current_q + alpha * (reward + gamma * max_next_q - current_q)
+        self.Q_val[state[0], state[1], action] = q
+
+    def print_polic(self):
+        directions = ['N','E','S','W']
+        for i in range(7):
+            for j in range(10):
+                indx = np.argmax(self.Q_val[i][j])
+                print(f"{directions[indx]} ", end = "")
+            print()
 
 
 if __name__ == "__main__":
     agent = Agent()
-    agent.print_envr()
+    agent.Q_learning_algo()
+    agent.print_polic()
 
 
