@@ -40,6 +40,7 @@ class Agent:
         self.environment = Q_table()
         self.environment.set_wind([0,0,0,1,1,1,2,2,1,0])
         self.position = self.environment.start       #define environment
+        self.learning_rate = 0.01
         self.path = []
         self.Q_val = np.zeros((7,10,4))
 
@@ -62,14 +63,14 @@ class Agent:
         
 
     def Q_learning_algo(self):
-         for _ in range(100):
+         for _ in range(200):
             self.environment.agent = self.environment.start
             state = self.environment.agent
 
             while state != self.environment.destination:
-                #select action with the biggest Q val(if determined)
+                #select action with the biggest Q val with prob = learning rate
                 rand = np.random.rand()
-                if rand < 0.001:
+                if rand < self.learning_rate:
                     action = np.random.randint(4)
                 else:
                     action = np.argmax(self.Q_val[state[0], state[1]])
@@ -85,7 +86,7 @@ class Agent:
         gamma = 0.9
         reward = -1
         if state == self.environment.destination:
-            reward = 1
+            reward = 1000
         max_next_q = np.max(self.Q_val[next_state[0], next_state[1]])
         current_q = self.Q_val[state[0], state[1], action]
         q = current_q + alpha * (reward + gamma * max_next_q - current_q)
@@ -103,6 +104,7 @@ class Agent:
 if __name__ == "__main__":
     agent = Agent()
     agent.Q_learning_algo()
+    print(agent.environment)
     agent.print_polic()
 
 
